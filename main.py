@@ -28,7 +28,9 @@ def index():
 
 @app.route('/newpost', methods=['GET', 'POST'])
 def new_post():
-    
+    title_error = ""
+    body_error = ""
+
     if request.method == 'POST':
         title = request.form['blog-title']
         body = request.form['blog-body']
@@ -36,7 +38,20 @@ def new_post():
         db.session.add(new_post)
         db.session.commit()
 
-    return render_template('newpost.html')
+        if title == "":
+            title_error = "Nope"
+
+        if body == "":
+            body_error = "Nope"
+
+        if title_error != "" and body_error != "":
+            return render_template("newpost.html", title_error=title_error, body_error=body_error)
+
+        if title_error == "" and body_error == "":
+            return redirect('/')
+        
+    else:
+        return render_template("newpost.html", title_error=title_error, body_error=body_error)
 
 if __name__ == '__main__':
     app.run()

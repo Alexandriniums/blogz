@@ -8,12 +8,12 @@
         <br>
             <div>
                 {% for post in posts %}
-                <h2><a href="/">{{post.title}}</a></h2>
+                <h2><a href="" value="{{post.id}}">{{post.title}}</a></h2>
                 {{post.body}}
-                    <!-- <form method="POST" action="/delete-post" style="display:inline-block;">
+                    <form method="POST" action="/delete-post" style="display:inline-block;">
                         <input type="hidden" name="blog-post-id" value="{{post.id}}" />
                         <input type="submit" value="Delete post" />
-                    </form> -->
+                    </form>
                     <hr />
                  
                 {% endfor %}

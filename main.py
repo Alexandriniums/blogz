@@ -22,7 +22,6 @@ class Blogs(db.Model):
 # these are request handlers below
 @app.route('/', methods=['GET'])
 def index():
-    
     posts = Blogs.query.all()
     return render_template('blog_list.html', posts=posts)
 
@@ -41,12 +40,3 @@ def new_post():
 
 if __name__ == '__main__':
     app.run()
-
-#@app.route("/delete-post", methods=['POST'])
-#def delete_entry():
-#    blog_post_id = int(request.form['blog-post-id'])
-#    post = Blogs.query.get(blog_post_id)
-#    db.session.delete(entry)
-#    db.session.commit()
-#
-#    return redirect('/')

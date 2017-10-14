@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Build-a-Blog!</h1>
+        {% if posts|length == 0 %}
+        <p>No blog entries yet</p>
+        {% else %}
+        <br>
+            <div>
+                {% for post in posts %}
+                <h2><a href="/">{{post.title}}</a></h2>
+                {{post.body}}
+                    <!-- <form method="POST" action="/delete-post" style="display:inline-block;">
+                        <input type="hidden" name="blog-post-id" value="{{post.id}}" />
+                        <input type="submit" value="Delete post" />
+                    </form> -->
+                    <hr />
+                 
+                {% endfor %}
+            </div>
+        
+        {% endif %}
+
+{% endblock %}

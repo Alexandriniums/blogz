@@ -7,10 +7,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:buildablog
 app.config['SQLALCHEMY_ECHO'] = True # setting for 2 things-learning about ORM and how flask apps/apps connect to dbs, and useful for debugging issues when the app isn't talking to your db like you expect it to
 db = SQLAlchemy(app) #calling a sqlalchemy constructor, pass in flask application to bind together. this creates a db object we can now use
 
-#data to put in db. create a persistent class (no longer in a list)
 class Blogs(db.Model):
-    
-    #specify datafields that should go into columns w/ this class
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
     body = db.Column(db.String(500))
@@ -19,39 +17,47 @@ class Blogs(db.Model):
         self.title = title
         self.body = body
 
-# these are request handlers below
-@app.route('/', methods=['GET'])
+@app.route('/')
 def index():
-    posts = Blogs.query.all()
-    return render_template('blog_list.html', posts=posts)
+    
+    if request.args:
+        blog_id = request.args.get('id')
+        blog = Blogs.query.get(blog_id)
+        return render_template("blog_entry.html", blog=blog)
+
+    else:
+        posts = Blogs.query.all()
+        return render_template('blog_list.html', title="Build-a-blog!", posts=posts)
 
 
 @app.route('/newpost', methods=['GET', 'POST'])
 def new_post():
-    title_error = ""
-    body_error = ""
+
+    if request.method == 'GET':
+        return render_template("newpost.html")
 
     if request.method == 'POST':
         title = request.form['blog-title']
         body = request.form['blog-body']
-        new_post = Blogs(title, body)
-        db.session.add(new_post)
-        db.session.commit()
+        title_error = ""
+        body_error = ""
 
-        if title == "":
-            title_error = "Nope"
+        if len(title) < 1:
+            title_error = "Please enter a title."
 
-        if body == "":
-            body_error = "Nope"
+        if len(body) < 1:
+            body_error = "Please fill in a blog post."
 
-        if title_error != "" and body_error != "":
-            return render_template("newpost.html", title_error=title_error, body_error=body_error)
+        if not title_error and not body_error:
+            new_post = Blogs(title, body)
+            db.session.add(new_post)
+            db.session.commit()
+            #blog_id = new_post.id
+            # return redirect('/blog_entry?id={0}'.format(blog_id))
+            blog_url = "/?id=" + str(new_post.id)
+            return redirect(blog_url)
 
-        if title_error == "" and body_error == "":
-            return redirect('/')
-        
-    else:
-        return render_template("newpost.html", title_error=title_error, body_error=body_error)
+        return render_template("newpost.html", title="Add New Blog Post", title_error=title_error, body_error=body_error)
 
 if __name__ == '__main__':
     app.run()

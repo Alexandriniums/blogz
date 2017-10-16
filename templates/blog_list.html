@@ -10,6 +10,8 @@
                 {% for post in posts %}
                 <h2><a href="./?id={{post.id}}">{{post.title}}</a></h2>
                 <p>{{post.body}}</p>
+                <br>
+                ({{post.date}})
                     <hr />
                  
                 {% endfor %}

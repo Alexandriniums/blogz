@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+            <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
         <title>{{title}}</title>
     </head>
     <body>
         <nav>
             <a href="/">Main Blog Page</a> 
-            <a href="/newpost">Add New Blog Post</a>
+            <a href="/blog_form">Add New Blog Post</a>
         </nav>
         {% block content %}
         {% endblock %}

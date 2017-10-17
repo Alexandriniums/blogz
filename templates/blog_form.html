@@ -14,7 +14,7 @@
                     <td><label for="blog-title">New blog post title:</label></td>
                 </tr>
                 <tr>
-                    <td><input type="text" id="blog-title" name="blog-title" value="" /></td>
+                    <td><input type="text" id="blog-title" name="blog-title" value="{{request.form['blog-title']}}" /></td>
                 </tr>
                 <tr>
                     <td class="error">{{title_error}}</td>
@@ -23,7 +23,7 @@
                     <td><br><label for="blog-body">New blog entry:</label></td>
                 </tr>
                 <tr>
-                    <td><input type="textarea" id="blog-body" name="blog-body" value="" /></td>
+                    <td><input type="textarea" id="blog-body" name="blog-body" value="{{request.form['blog-body']}}" /></td>
                 </tr>
                 <tr>
                     <td class="error">{{body_error}}</td>

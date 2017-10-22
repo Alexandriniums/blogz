@@ -92,29 +92,32 @@ def signup():
 
 @app.route('/')
 def index():
-    authors = User.query.all()
+    users = User.query.all()
 
-    if request.method == 'GET':
-        
-        return render_template('index.html', title="All Blog Users", authors=authors)
+    return render_template('index.html', title="All Blog Users", users=users)
 
 @app.route('/blog')
 def blog_list():
 
     owner = User.query.filter_by(email=session['email']).first()
 
-    if request.args:
+    if request.args.get("id"):
         blog_id = request.args.get('id')
         blog = Blog.query.get(blog_id)
         blog_date = request.args.get('date')
         return render_template("single_post.html", blog=blog, blog_date=blog_date)
 
+    elif request.args.get("user"):
+        user_id = request.args.get('user')
+        user = User.query.get(user_id)
+        posts = Blog.query.filter_by(owner=user).order_by(Blog.date.desc()).all()
+        return render_template("single_user.html", user=user, posts=posts)
+
     else:
         #posts = Blog.query.all()
-        posts = Blog.query.filter_by(owner=owner).all()
-        #posts = Blog.query.order_by(Blog.date.desc()).all()
+        #posts = Blog.query.filter_by(owner=owner).all()
+        posts = Blog.query.order_by(Blog.date.desc()).all()
         return render_template('blog_list.html', title="Build-a-blog!", posts=posts, owner=owner)
-
 
 @app.route('/blog_form', methods=['GET', 'POST'])
 def new_post():

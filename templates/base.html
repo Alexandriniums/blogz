@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-            <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
+        <link rel="stylesheet" type="text/css" href="/static/styles/style.css">
         <title>{{title}}</title>
     </head>
     <body>
         <nav>
-            <a href="/">All Users</a> &nbsp; | &nbsp; 
-            <a href="/blog">All Blog Posts</a> &nbsp; | &nbsp; 
-            <a href="/blog_form">Add New Blog Post</a> &nbsp; | &nbsp; 
-            <a href="/login">Login</a> / 
-            <a href="/logout">Logout</a>
+            <ul>
+                <li><a href="/">All Users</a>
+                <li><a href="/blog">All Blog Posts</a>
+                <li><a href="/blog_form">Add New Blog Post</a>
+                <li style="float:right"><a href="/logout">Logout</a></li>
+                <li style="float:right"><a href="/login">Login</a></li>
+            </ul>
         </nav>
 
+        {% if 'email' in session %}
+            <h3>Current user: {{session['email']}}</h3>
+        {% endif %}
+        
+        <br>
         {% with messages = get_flashed_messages(with_categories=True) %}
             {% for category,message in messages %}
                 <div><ul>
@@ -23,6 +30,5 @@
 
         {% block content %}
         {% endblock %}
-
     </body>
 </html>

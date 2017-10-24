@@ -14,7 +14,7 @@ class Blog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
     body = db.Column(db.String(500))
-    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __init__(self, title, body, date, owner):
@@ -35,7 +35,7 @@ class User(db.Model):
 
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'signup', 'blog', 'index'] # these are named after their FUNCTIONS
+    allowed_routes = ['login', 'signup', 'blog_list', 'index'] # these are named after their FUNCTIONS
     if request.endpoint not in allowed_routes and 'email' not in session:
         return redirect('/login')
 
@@ -99,25 +99,24 @@ def index():
 @app.route('/blog')
 def blog_list():
 
-    owner = User.query.filter_by(email=session['email']).first()
-
     if request.args.get("id"):
         blog_id = request.args.get('id')
         blog = Blog.query.get(blog_id)
         blog_date = request.args.get('date')
-        return render_template("single_post.html", blog=blog, blog_date=blog_date)
+        return render_template("single_post.html", title="Single Post", blog=blog, blog_date=blog_date)
 
     elif request.args.get("user"):
         user_id = request.args.get('user')
         user = User.query.get(user_id)
         posts = Blog.query.filter_by(owner=user).order_by(Blog.date.desc()).all()
-        return render_template("single_user.html", user=user, posts=posts)
+        return render_template("single_user.html", user=user, posts=posts, title="User Posts")
 
     else:
         #posts = Blog.query.all()
         #posts = Blog.query.filter_by(owner=owner).all()
+        #owner = User.query.filter_by(email=session['email']).first()
         posts = Blog.query.order_by(Blog.date.desc()).all()
-        return render_template('blog_list.html', title="Build-a-blog!", posts=posts, owner=owner)
+        return render_template('blog_list.html', title="All Blog Posts", posts=posts)
 
 @app.route('/blog_form', methods=['GET', 'POST'])
 def new_post():

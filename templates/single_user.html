@@ -1,15 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <h1>User posts!</h1>
+        {% if posts|length == 0 %}
+            <p>No blog posts yet...how sad.</p>
+        {% else %}
+        <br>
+        {% for post in posts %}
+            <h1><a href="./blog?id={{post.id}}">{{post.title}}</a></h1>
+            <p>{{post.body}}</p>
+            <div>({{post.date}})</div>
+            <div>by <a href="./blog?user={{user.id}}">{{post.owner.email}}</a></div>
 
-    {% for post in posts %}
-        <h1><a href="./blog?id={{post.id}}">{{post.title}}</a></h1>
-        <p>{{post.body}}</p>
-        <div>({{post.date}})</div>
-        <div>by <a href="./blog?user={{user.id}}">{{post.owner.email}}</a></div>
+            <hr />
+        {% endfor %}
 
-        <hr />
-    {% endfor %}
-
+        {% endif %}
 
 {% endblock %}

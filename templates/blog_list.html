@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>My blog posts</h1>
+    <h1>All blog posts</h1>
         {% if posts|length == 0 %}
-        <p>No blog posts yet</p>
+        <p>No blog posts yet. Let's <a href="/blog_form">fix that</a>.</p>
         {% else %}
         <br>
             <div>
@@ -13,12 +13,12 @@
                 <br>
                 ({{post.date}})
                 <br>
-                by <a href="./blog?user={{owner.id}}">{{post.owner.email}}</a>
+                by <a href="./blog?user={{post.owner.id}}">{{post.owner.email}}</a>
                     <hr />
-                 
+
                 {% endfor %}
             </div>
-        
+
         {% endif %}
 
 {% endblock %}
